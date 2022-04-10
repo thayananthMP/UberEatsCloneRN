@@ -6,7 +6,7 @@ export const localRestaurants = [
   {
     name: 'Beachside Bar',
     image: require('../../assets/images/food01.png'),
-    categories: ['Cafe', 'Bar'],
+    categories: [{title: 'Indian'}, {title: 'Comfort food'}, {title: 'Coffee'}],
     price: '$$',
     reviews: 1244,
     rating: 4.5,
@@ -29,26 +29,45 @@ export const localRestaurants = [
   },
 ];
 
-export default function RestaurantItems(props) {
-
+export default function RestaurantItems({navigation, ...props}) {
   return (
-    <TouchableOpacity activeOpacity={1} style={{marginBottom: 30}}>
+    <>
       {props.restaurantData &&
         props.restaurantData.map((restaurant, index) => (
-          <View
+          <TouchableOpacity
             key={index}
-            style={{marginTop: 10, padding: 15, backgroundColor: 'white'}}>
-            <RestaurantImage image={restaurant.image} />
-            <RestaurantInfo name={restaurant.name} rating={restaurant.rating} />
-          </View>
+            activeOpacity={1}
+            style={{marginBottom: 30}}
+            onPress={() =>
+              navigation.navigate('RestaurantDetails', {
+                name: restaurant.name,
+                image: restaurant.image,
+                price: restaurant.price,
+                reviews: restaurant.reviews,
+                rating: restaurant.rating,
+                categories: restaurant.categories,
+              })
+            }>
+            <View
+              style={{marginTop: 10, padding: 15, backgroundColor: 'white'}}>
+              <RestaurantImage image={restaurant.image} />
+              <RestaurantInfo
+                name={restaurant.name}
+                rating={restaurant.rating}
+              />
+            </View>
+          </TouchableOpacity>
         ))}
-    </TouchableOpacity>
+    </>
   );
 }
 
 const RestaurantImage = props => (
   <>
-    <Image source={getImage(props.image)} style={{width: '100%', height: 180}} />
+    <Image
+      source={getImage(props.image)}
+      style={{width: '100%', height: 180}}
+    />
     <TouchableOpacity style={{position: 'absolute', right: 20, top: 20}}>
       <MaterialCommunityIcons
         name="heart-outline"
@@ -86,11 +105,13 @@ const RestaurantInfo = props => (
   </View>
 );
 
-
-function getImage(imageName) {
-  switch(imageName) {
-    case "food01.png": return require("../../assets/images/food01.png");
-    case "food02.png": return require("../../assets/images/food02.png");
-    case "food03.png": return require("../../assets/images/food03.png");
+export function getImage(imageName) {
+  switch (imageName) {
+    case 'food01.png':
+      return require('../../assets/images/food01.png');
+    case 'food02.png':
+      return require('../../assets/images/food02.png');
+    case 'food03.png':
+      return require('../../assets/images/food03.png');
   }
 }
